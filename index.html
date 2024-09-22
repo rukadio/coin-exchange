@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Website</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f9fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .toggle {
+            margin-top: 20px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .toggle:hover {
+            text-decoration: underline;
+        }
+        #message {
+            margin-top: 15px;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="loginContainer">
+        <h2>Log In</h2>
+        <form id="loginForm">
+            <label for="loginUsername">Username:</label>
+            <input type="text" id="loginUsername" required>
+
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" required>
+
+            <button type="submit">Log In</button>
+        </form>
+        <p id="loginMessage"></p>
+        <div class="toggle">
+            <p id="toRegister">Don't have an account? Create Account</p>
+            <p id="forgotPassword">Forgot Password?</p>
+        </div>
+    </div>
+
+    <div class="container" id="registerContainer" style="display: none;">
+        <h2>Create Account</h2>
+        <form id="registerForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+
+            <label for="number">Phone Number:</label>
+            <input type="text" id="number" required>
+
+            <label for="email">Gmail:</label>
+            <input type="email" id="email" required>
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
+
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" required>
+
+            <label for="currentPassword">Current Password:</label>
+            <input type="password" id="currentPassword" required>
+
+            <button type="submit">Create Account</button>
+        </form>
+        <p id="registerMessage"></p>
+        <div class="toggle">
+            <p id="toLogin">Already have an account? Log In</p>
+        </div>
+    </div>
+
+    <script>
+        const loginContainer = document.getElementById('loginContainer');
+        const registerContainer = document.getElementById('registerContainer');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginMessage = document.getElementById('loginMessage');
+        const registerMessage = document.getElementById('registerMessage');
+
+        // Login form submission
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const savedUsername = localStorage.getItem('username');
+            const savedPassword = localStorage.getItem('currentPassword');
+
+            if (username === savedUsername && password === savedPassword) {
+                loginMessage.innerText = 'Login successful!';
+                loginMessage.style.color = '#28a745'; // Green color
+            } else {
+                loginMessage.innerText = 'Invalid credentials!';
+            }
+        });
+
+        // Registration form submission
+        registerForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const number = document.getElementById('number').value;
+            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const currentPassword = document.getElementById('currentPassword').value;
+
+            localStorage.setItem('name', name);
+            localStorage.setItem('number', number);
+            localStorage.setItem('email', email);
+            localStorage.setItem('username', username);
+            localStorage.setItem('newPassword', newPassword);
+            localStorage.setItem('currentPassword', currentPassword);
+
+            registerMessage.innerText = 'Account created successfully!';
+            registerForm.reset();
+        });
+
+        // Toggle between login and registration
+        document.getElementById('toRegister').addEventListener('click', function() {
+            loginContainer.style.display = 'none';
+            registerContainer.style.display = 'block';
+            loginMessage.innerText = '';
+        });
+
+        document.getElementById('toLogin').addEventListener('click', function() {
+            registerContainer.style.display = 'none';
+            loginContainer.style.display = 'block';
+            registerMessage.innerText = '';
+        });
+
+        // Forgot password functionality
+        document.getElementById('forgotPassword').addEventListener('click', function() {
+            const email = prompt("Please enter your registered email:");
+            const savedEmail = localStorage.getItem('email'); // Assuming you saved email during registration
+            
+            if (email === savedEmail) {
+                alert("An email has been sent to reset your password."); // Here, you would actually send an email
+            } else {
+                alert("Email not found!");
+            }
+        });
+    </script>
+</body>
+</html>
